@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 711920dea98b025419341fc98550f0e6, type: 3}
+  m_Name: BaseHallwayFunctions
+  m_EditorClassIdentifier: 
+  maxTileCount: 2000
+  minStraightLength: 4
+  baseTurnChance: 0.1
+  newHallChanceOnTurn: 0.05
+  newRoomChance: 0.1
+  newHallChanceOnRoom: 0
+  FloorTiles:
+  - {fileID: 11400000, guid: 028b17212dee37a49b5be36776328525, type: 2}
+  - {fileID: 11400000, guid: 5d6ba42eb6a05984391fb51f0e02172d, type: 2}
+  - {fileID: 11400000, guid: 12012c29f704d03479e09378117a74be, type: 2}
+  - {fileID: 11400000, guid: ab8dfc159ec01e941844602967b32282, type: 2}
+  - {fileID: 11400000, guid: f9c02610d49757940be23f18735b637c, type: 2}
+  - {fileID: 11400000, guid: 5bff7e4e87fa0e640912c10ff58ffc72, type: 2}
+  - {fileID: 11400000, guid: 26c34763ea7d28349a44dd47af3aef8c, type: 2}
+  - {fileID: 11400000, guid: b57972f6a1b2ed34d8928e1f5d3d4717, type: 2}
+  - {fileID: 11400000, guid: e446b2c84f50fc04baed3d9fe61e1c91, type: 2}
+  - {fileID: 11400000, guid: a2e3f93fa0a197740b68556924a0f5f6, type: 2}
+  - {fileID: 11400000, guid: db2b708f215be2141a32e9cdee27ebd0, type: 2}
+  WallTile: {fileID: 11400000, guid: 15b33940e8a7dab4aa270478484d36e7, type: 2}
+  SecHallPrefab: {fileID: 2514484523578545367, guid: 7d55d244419a8ec48b2a7df3b501417f, type: 3}
+  maxSecHallLength: 30
+  minSecHallLength: 150
+  HallDeathRoomChance: 0.6
+  RoomMakerPrefab: {fileID: 7910993906661955077, guid: dc04668ff599ddd41b5f1b7383aee34a, type: 3}
+  minRoomLength: 3
+  maxRoomLength: 10
