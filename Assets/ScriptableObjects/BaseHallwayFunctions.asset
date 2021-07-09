@@ -12,17 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 711920dea98b025419341fc98550f0e6, type: 3}
   m_Name: BaseHallwayFunctions
   m_EditorClassIdentifier: 
-  maxTileCount: 2000
+  maxTileCount: 250
   minStraightLength: 4
   baseTurnChance: 0.1
   newHallChanceOnTurn: 0.05
   newRoomChance: 0.1
-  newHallChanceOnRoom: 0
+  newHallChanceOnRoom: 0.5
+  chanceTurnOnNewRoom: 0.66
   FloorTiles:
-  - {fileID: 11400000, guid: 028b17212dee37a49b5be36776328525, type: 2}
+  - {fileID: 11400000, guid: ab8dfc159ec01e941844602967b32282, type: 2}
   - {fileID: 11400000, guid: 5d6ba42eb6a05984391fb51f0e02172d, type: 2}
   - {fileID: 11400000, guid: 12012c29f704d03479e09378117a74be, type: 2}
-  - {fileID: 11400000, guid: ab8dfc159ec01e941844602967b32282, type: 2}
+  - {fileID: 11400000, guid: 028b17212dee37a49b5be36776328525, type: 2}
   - {fileID: 11400000, guid: f9c02610d49757940be23f18735b637c, type: 2}
   - {fileID: 11400000, guid: 5bff7e4e87fa0e640912c10ff58ffc72, type: 2}
   - {fileID: 11400000, guid: 26c34763ea7d28349a44dd47af3aef8c, type: 2}

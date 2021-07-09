@@ -32,10 +32,14 @@ public class SecondaryHallwayMaker : BaseHallwayMaker
         else {
             //Self-Destruct
             float rnd = Random.Range(0f, 1f);
-            if(rnd < Functions.HallDeathRoomChance) {
-                CreateRoom();
-            }
             TileManager.Instance.Makers.Remove(gameObject);
+            TileManager.Instance.RemoveFromMakers();
+            if(rnd < Functions.HallDeathRoomChance) {
+                int width = Random.Range(Functions.minRoomLength, Functions.maxRoomLength);
+                int height = Random.Range(Functions.minRoomLength, Functions.maxRoomLength);
+                int offset = Random.Range(0, width);
+                CreateRoom(width, height, offset);
+            }
             Destroy(gameObject);
         }
         //Increments curHallLength

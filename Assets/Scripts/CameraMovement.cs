@@ -11,6 +11,7 @@ public class CameraMovement : MonoBehaviour
     [SerializeField] private float minZoom;
     [SerializeField] private float maxZoom;
     [SerializeField] private float zoomSpeed;
+    [SerializeField] private float PlayingZoom;
     void Start()
     {
         myCam = GetComponent<Camera>();
@@ -19,8 +20,9 @@ public class CameraMovement : MonoBehaviour
         curZoom = baseZoom;
     }
 
-    void Update()
+    void LateUpdate()
     {
+        if(TileManager.Instance.CurGameState == GameState.Generating) {
         //Move the camera around
         if(Input.GetKey(KeyCode.LeftArrow)) {
             transform.position -= transform.right * camSpeed * Time.deltaTime;
@@ -45,7 +47,11 @@ public class CameraMovement : MonoBehaviour
             curZoom = Mathf.Clamp(curZoom, minZoom, maxZoom);
             myCam.orthographicSize = curZoom;
         }
-
+        }
+        else if(TileManager.Instance.CurGameState == GameState.Playing) {
+            transform.position = TileManager.Instance.Player.transform.position + new Vector3(0f, 0f, -15f);
+            myCam.orthographicSize = PlayingZoom;
+        }
         //TODO: Zooming and moving should happen relative to current position
     }
 }

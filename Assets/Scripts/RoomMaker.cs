@@ -18,7 +18,7 @@ public class RoomMaker : MonoBehaviour
     void Update()
     {
         //It starts by placing a tile
-        Vector2Int intPos = new Vector2Int(Mathf.FloorToInt(transform.position.x), Mathf.FloorToInt(transform.position.y));
+        Vector2Int intPos = GeneralFunctions.Vec3ToVec2Int(transform.position);
         TileManager.Instance.PlaceTile(intPos, TileType.Room);
         //When it reaches the side of the room, it moves up and back
         if(x >= width) {
@@ -29,6 +29,7 @@ public class RoomMaker : MonoBehaviour
             //if its reached the end of the room, it gets destroyed
             if(y >= height) {
                 TileManager.Instance.Makers.Remove(gameObject);
+                TileManager.Instance.RemoveFromMakers();
                 Destroy(gameObject);
             }
         }

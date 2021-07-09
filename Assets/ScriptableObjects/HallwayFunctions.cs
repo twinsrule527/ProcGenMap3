@@ -12,6 +12,7 @@ public class HallwayFunctions : ScriptableObject
     public float newHallChanceOnTurn;//Probability that it generates a new hallway instead of turning
     public float newRoomChance;//Probability that it generates a new room instead of turning (or plus turning)
     public float newHallChanceOnRoom;//Proability that it generates a new hallway when it generates a new room
+    public float chanceTurnOnNewRoom;//Probability that a hallway will turn when it creates a new room
     public List<Tile> FloorTiles;//List of types of tiles for the floor (might eventually be split up into floor types)
     public Tile WallTile;
     public SecondaryHallwayMaker SecHallPrefab;//Prefab of the main kind of secondary hallway maker
