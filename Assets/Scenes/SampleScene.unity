@@ -253,6 +253,7 @@ MonoBehaviour:
   RightMove: 100
   UpMove: 119
   DownMove: 115
+  offsetFromTiles: {x: 0.5, y: 0.5, z: -2}
 --- !u!212 &234449461
 SpriteRenderer:
   m_ObjectHideFlags: 0

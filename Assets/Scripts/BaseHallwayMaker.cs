@@ -7,6 +7,7 @@ public class BaseHallwayMaker : MonoBehaviour
 {
     [SerializeField] protected HallwayFunctions Functions;
     protected int curStraightLength;
+    protected int turnTimes;//How many times the hallway maker has turned in 1 direction: positive is right, negative is left
     void Start()
     {
         TileManager.Instance.tileCount = 0;
@@ -24,6 +25,8 @@ public class BaseHallwayMaker : MonoBehaviour
         //Goes straight as long a its straight length is less than the minimum
         if(curStraightLength < Functions.minStraightLength) {
             curStraightLength++;
+            //when going straight, has a tiny chance to jog first
+            Jog();
             HallForward();
         }
         //Otherwise, might turn
@@ -86,14 +89,18 @@ public class BaseHallwayMaker : MonoBehaviour
                 curStraightLength = 0;
             }
             else {
+                Jog();
                 HallForward();
             }
         }
         //If the maximum length has been reached, it sacrifices itself, and leads to the game end
         if(TileManager.Instance.tileCount >= Functions.maxTileCount) {
+            //Game break happens before this
+            Debug.Log(1);
             TileManager.Instance.Makers.Remove(gameObject);
             TileManager.Instance.RemoveFromMakers();
             TileManager.Instance.endgame = 1;
+            Debug.Log(2);
             Destroy(gameObject);
         }
     }
@@ -108,13 +115,47 @@ public class BaseHallwayMaker : MonoBehaviour
     protected void HallTurn() {
         float rnd = Random.Range(0f, 1f);
         Vector3 rot = new Vector3(0f, 0f, 90f);
-        if(rnd > 0.5f) {
+        if(rnd > 0.5f + 0.1f * turnTimes) {//If clause needs to include mathematical turn decay
         //Rotate right
             transform.rotation *= Quaternion.Euler(rot);
+            if(turnTimes < 0) {
+                turnTimes = 0;
+            }
+            else {
+                turnTimes++;
+            }
         }
         else {
             //Rotate Left
             transform.rotation *= Quaternion.Euler(-rot);
+            if(turnTimes > 0) {
+                turnTimes = 0;
+            }
+            else {
+                turnTimes--;
+            }
+        }
+    }
+    //Checks to see if the hallway should jog, then jogs one way or another (more likely to jog the same direction as last time)
+    protected void Jog() {
+        float rnd = Random.Range(0f, 1f);
+        if(rnd < Functions.jogChance) {
+            float rnd1 = Random.Range(0f, 1f);
+            //chooses a direction to jog - eventually will be more likely to be the same direction multiple times in a row
+            int direction;
+            if(rnd1 > 0.5f) {
+                direction = 1;
+            }
+            else {
+                direction = -1;
+            }
+            //Decides how much it will jog to the side by (base of 1)
+            int jogAmount = Random.Range(1, Functions.maxJogAmount+1);
+            for(int i = 0; i < jogAmount; i++) {
+                transform.position += transform.right * direction;
+                Vector2Int intPos = GeneralFunctions.Vec3ToVec2Int(transform.position);
+                TileManager.Instance.PlaceTile(intPos, TileType.Hallway);
+            }
         }
     }
 

@@ -12,13 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 711920dea98b025419341fc98550f0e6, type: 3}
   m_Name: BaseHallwayFunctions
   m_EditorClassIdentifier: 
-  maxTileCount: 250
-  minStraightLength: 4
+  maxTileCount: 2000
+  minStraightLength: 3
   baseTurnChance: 0.1
   newHallChanceOnTurn: 0.05
-  newRoomChance: 0.1
-  newHallChanceOnRoom: 0.5
+  newRoomChance: 0.2
+  newHallChanceOnRoom: 0.7
   chanceTurnOnNewRoom: 0.66
+  jogChance: 0.02
+  maxJogAmount: 3
   FloorTiles:
   - {fileID: 11400000, guid: ab8dfc159ec01e941844602967b32282, type: 2}
   - {fileID: 11400000, guid: 5d6ba42eb6a05984391fb51f0e02172d, type: 2}
@@ -32,10 +34,14 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a2e3f93fa0a197740b68556924a0f5f6, type: 2}
   - {fileID: 11400000, guid: db2b708f215be2141a32e9cdee27ebd0, type: 2}
   WallTile: {fileID: 11400000, guid: 15b33940e8a7dab4aa270478484d36e7, type: 2}
+  EndTile: {fileID: 11400000, guid: 8529d485d1d2e2d40a9da682d392e887, type: 2}
+  DoorTile: {fileID: 11400000, guid: e1277eac52a75dc429096246c3ec6f1a, type: 2}
+  DoorAtRoomEndChance: 0.6
   SecHallPrefab: {fileID: 2514484523578545367, guid: 7d55d244419a8ec48b2a7df3b501417f, type: 3}
-  maxSecHallLength: 30
-  minSecHallLength: 150
-  HallDeathRoomChance: 0.6
+  maxSecHallLength: 150
+  minSecHallLength: 20
+  HallDeathRoomChance: 0.8
   RoomMakerPrefab: {fileID: 7910993906661955077, guid: dc04668ff599ddd41b5f1b7383aee34a, type: 3}
-  minRoomLength: 3
-  maxRoomLength: 10
+  minRoomLength: 4
+  maxRoomLength: 8
+  endTileIsRoom: 1

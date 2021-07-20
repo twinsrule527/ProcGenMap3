@@ -8,10 +8,13 @@ public struct TileTraits {
     public int y;
     public Sprite sprite;
     public TileType type;
+    public int number;//The number tile placed
 }
 
 public enum TileType {
     Hallway,
     Room,
-    Wall
+    Door,
+    Wall,
+    End
 }

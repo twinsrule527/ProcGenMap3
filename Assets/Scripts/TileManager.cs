@@ -25,6 +25,8 @@ public class TileManager : Singleton<TileManager>
             return _curGameState;
         }
     }
+    private const int END_TILE_TRIES = 50;//How many times it tries to create an end tile
+    private const float END_TILE_REPLACE_CHANCE = 0.2f;//The chance that the end tile will be replaced w/ one further away if it happens on a try
     void Awake()
     {
         Tiles = new Dictionary<Vector2Int, TileTraits>();
@@ -43,6 +45,7 @@ public class TileManager : Singleton<TileManager>
     {
         //When the endgame is reached, it generates walls
         if(endgame == 1) {
+            Debug.Log(1);//Game crashes before this
             if(Makers.Count == 0) {
                 Player.gameObject.SetActive(true);
                 _curGameState = GameState.Playing;//Currently automatically sets to Playing when game ends
@@ -61,6 +64,58 @@ public class TileManager : Singleton<TileManager>
                         }
                     }
                 }
+                for(int i = 0; i < TileList.Count; i++) {
+                    MakeTileDoor(TileList[i]);
+                }
+                //Creates an exit, by using a list of all Tiles greater than a certain value
+                /*
+                for(int i = TileList.Count - 1; i >= 0; i--) {
+                    if(TileList[i].number < Mathf.FloorToInt(tileCount / 2)) {
+                        TileList.RemoveAt(i);
+                    }
+                }*/
+                //Using this new list, picks a random spot until either its picked a certain number, or its picked one far enough from start
+                TileTraits endTile = Tiles[Vector2Int.zero];
+                int endDist = 0;
+                int tries = 0;
+
+                //If the end tile must be in a room, creates a new list of those tiles
+                if(Functions.endTileIsRoom) {
+                    List<TileTraits> newTileList = new List<TileTraits>();
+                    foreach(TileTraits tile in TileList) {
+                        if(tile.type == TileType.Room) {
+                            newTileList.Add(tile);
+                        }
+                    }
+                    //Only uses the new room list if there are tiles in rooms to use
+                    if(newTileList.Count > 0) {
+                        TileList = new List<TileTraits>(newTileList);
+                    }
+                }
+
+                while(tries < END_TILE_TRIES) {//tries many times to get an optimal placement of an end tile
+                    int val = Random.Range(0, TileList.Count);
+                    TileTraits checkTile = TileList[val];
+                    int checkDist = Mathf.Abs(checkTile.x) + Mathf.Abs(checkTile.y);
+                    //If the new tile is further away from the start, it might become the actual end tile
+                    if(endDist < checkDist) {
+                        if(endDist == 0) {
+                            endTile = checkTile;
+                            endDist = checkDist;
+                        }
+                        else {
+                            float rnd = Random.Range(0f, 1f);
+                            if(rnd < END_TILE_REPLACE_CHANCE) {
+                                endTile = checkTile;
+                                endDist = checkDist;
+                            }
+                        }
+                    }
+                    tries++;
+                }
+                //EndTile becomes an EndTile
+                PlaceTile(new Vector2Int(endTile.x, endTile.y), TileType.End);
+
             }
         }   
     }
@@ -77,6 +132,12 @@ public class TileManager : Singleton<TileManager>
                 Map.SetTile((Vector3Int)pos, myTile);
                 curTile.type = type;
                 curTile.sprite = myTile.sprite;
+                Tiles[pos] = curTile;
+            }
+            else if(type == TileType.End) {
+                Map.SetTile((Vector3Int)pos, Functions.EndTile);
+                curTile.type = type;
+                curTile.sprite = Functions.EndTile.sprite;
                 Tiles[pos] = curTile;
             }
         }
@@ -99,6 +160,7 @@ public class TileManager : Singleton<TileManager>
             //Sprite assignment should depend on floor type
             newTile.sprite = myTile.sprite;
             newTile.type = type;
+            newTile.number = tileCount;
             Tiles.Add(pos, newTile);
             tileCount++;
         }
@@ -118,6 +180,38 @@ public class TileManager : Singleton<TileManager>
             newRunning.SetActive(true);
             if(newRunning.GetComponent<BaseHallwayMaker>() != null) {
                 newRunning.GetComponent<BaseHallwayMaker>().OnReEnable();
+            }
+        }
+    }
+
+    //Checks a tile, and sees if it should turn into a door
+    void MakeTileDoor(TileTraits tile) {
+        //Only applies to hallway tiles
+        if(tile.type == TileType.Hallway) {
+            //Checks to see if its adjacent to a room tile
+            TileTraits[] tileAdjacency = Functions.CardinalAdjacency(new Vector2Int(tile.x, tile.y));
+            int adjacentRoomNum = -1;
+            for(int i = 0; i < tileAdjacency.Length; i++) {
+                if(tileAdjacency[i].type == TileType.Room) {
+                    adjacentRoomNum = i;
+                    break;
+                }
+            }
+            //If a room is found this way, you continue
+            if(adjacentRoomNum > -1) {
+                //Checks if the opposite tile is a hallway and the others are wall (condition needed for door)
+                if(tileAdjacency[(adjacentRoomNum + 2)%tileAdjacency.Length].type == TileType.Hallway || tileAdjacency[(adjacentRoomNum + 2)%tileAdjacency.Length].type == TileType.Room) {
+                    if(tileAdjacency[(adjacentRoomNum + 1)%tileAdjacency.Length].type == TileType.Wall && tileAdjacency[(adjacentRoomNum + 3)%tileAdjacency.Length].type == TileType.Wall) {
+                        //Chance to Become a door
+                        float rnd = Random.Range(0f, 1f);
+                        if(rnd < Functions.DoorAtRoomEndChance) {
+                            tile.type = TileType.Door;
+                            Map.SetTile(new Vector3Int(tile.x, tile.y, 0), Functions.DoorTile);
+                            tile.sprite = Functions.DoorTile.sprite;
+                            Tiles[new Vector2Int(tile.x, tile.y)] = tile;
+                        }
+                    }
+                }
             }
         }
     }
